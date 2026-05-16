@@ -1,4 +1,4 @@
-you like my documentation or would u add/chande anything? Simple program to fetch weather every 10 minute and log it in to a file
+Simple program to fetch weather every 10 minute and log it in to a file
 (requests module + linux systemd service).
 
 created script `weather_program.sh`
