@@ -26,5 +26,5 @@ def fetch_weather(city):
 if __name__ == "__main__":
     city = "Dusheti"
     output = fetch_weather(city)
-    with open("weather_log.txt", "a") as inp:
+    with open("/home/nikol/weatherprogram/weather_log.txt", "a") as inp:
         inp.write(output + "\n")
