@@ -1,30 +1,46 @@
 #!/usr/bin/env python3
 import requests
-from datetime import datetime
-def fetch_weather(city):
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid=062d36d7d581afb49808db1a37fe0ab4&units=metric"
-    response = requests.get(url)
+import yagmail
+import os
+import dotenv
+
+dotenv.load_dotenv()
+API_KEY = os.getenv("WEATHER_API_KEY")
+PASSWORD = os.getenv("PASSWORD")
+
+def fetch_weather(latitude, longitude):
+    url = "https://api.openweathermap.org/data/2.5/weather"
+    params = {
+        "lat": latitude,
+        "lon": longitude,
+        "appid": API_KEY,
+        "units": "metric"
+    }
+
+    response = requests.get(url, params=params)
 
     if response.status_code == 200:
         data = response.json()
-        temp = data["main"]["temp"]
-        humidity = data["main"]["humidity"]
-        description = data["weather"][0]["description"]
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        result = (
-       f"\nCity: {city}\n"
-       f"Temperature: {temp}°C\n"
-       f"Humidity: {humidity}%\n"
-       f"Weather: {description.capitalize()}\n"
-       f"Fetched at: {timestamp}\n"
-        )
-        return result
+        return data["main"]["temp"]
     else:
-        error_msg = "Error: Could not fetch weather data."
-        return error_msg
+        print(f"Debug Info:  {response.status_code}, Response: {response.text}")
+        return None
+
+
+
 if __name__ == "__main__":
-    city = "Dusheti"
-    output = fetch_weather(city)
-    with open("/home/nikol/weatherprogram/weather_log.txt", "a") as inp:
-        inp.write(output + "\n")
+    lat = 44.69025828
+    lon = 42.08468122
+    temp = fetch_weather(lat, lon)
+    if temp is not None:
+        body = f"ტემპერატურა არის {temp}°C"
+        yg = yagmail.SMTP("gorgadze420@gmail.com",f"{PASSWORD}")
+        yg.send(
+            to="avsajanishvilinikol@gmail.com",
+            subject="შეტყობინება",
+            contents=body
+        )
+        print("Email sent.")
+    else:
+        print("Failed to fetch weather data.")
+
