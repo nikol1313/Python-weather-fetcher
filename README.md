@@ -1,8 +1,8 @@
-Simple program to fetch weather every 10 minute and log it in to a file
+Simple program to fetch weather every 3 hour and sends an email
 (requests module + linux systemd service).
 
 created script `weather_program.sh`
-and also weather.service/weather.timer to run the program every 10 minute.
+and also weather.service/weather.timer to run the program every 3 hour.
 
 `cat /etc/systemd/system/Weather.service`
 ```
@@ -25,7 +25,7 @@ this service need the timer to run every 10 minute
 
 ```
 [Unit]
-Description=run the weather_program.sh every 10 minute and fetch the weather
+Description=run the weather_program.sh every 3 hour and fetch the weather
 
 [Timer]
 OnUnitActiveSec=10min
@@ -35,4 +35,4 @@ Unit=weather.service
 WantedBy=timers.target
 ```
 
-then we force enable the timer service and it starts to run every 10 min and log the weather in `weather_log.txt`
+then we force enable the timer service and it starts to run every 3 hours and sends us an email.
